@@ -1,5 +1,6 @@
 package com.shet.ivo.appone;
 
+import android.content.Context;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,10 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.yandex.metrica.YandexMetrica;
+import com.yandex.metrica.YandexMetricaConfig;
+
+public class MainActivity extends AppCompatActivity{
 
     //determine elements
     private TextView distance_total;
@@ -27,10 +31,14 @@ public class MainActivity extends AppCompatActivity {
     private int current_time;
     private int current_speed;
 
+    private AppMetrik appMetrik;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setAppMetrik();
         setElement();
         if (savedInstanceState == null)
         {
@@ -43,6 +51,15 @@ public class MainActivity extends AppCompatActivity {
             custom_speed = savedInstanceState.getInt(CUSTOM_SPEED);
         }
 
+    }
+
+    private void setAppMetrik()
+    {
+        appMetrik = AppMetrik.getInstance();
+        context = appMetrik.getContext();
+        YandexMetrica.activate(getApplicationContext(), getString(R.string.metrika_api_key));
+        // Отслеживание активности пользователей
+        YandexMetrica.enableActivityAutoTracking(appMetrik);
     }
 
     @Override
